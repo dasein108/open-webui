@@ -180,7 +180,7 @@ async def chat_completion_tools_handler(
             async def tool_call_handler(tool_call):
                 nonlocal skip_files
 
-                print(f"TOOL CALL: {tool_call=}")
+                log.debug(f"{tool_call=}")
 
                 tool_function_name = tool_call.get("name", None)
                 if tool_function_name not in tools:
@@ -200,7 +200,6 @@ async def chat_completion_tools_handler(
                         for k, v in tool_function_params.items()
                         if k in allowed_params
                     }
-                    print(f"TOOOL {tool}")
 
                     if tool.get("direct", False):
                         tool_result = await event_caller(
@@ -215,12 +214,9 @@ async def chat_completion_tools_handler(
                                 },
                             }
                         )
-                        print(f"RESULT EVENT CALLER: {tool_result}")
-
                     else:
                         tool_function = tool["callable"]
                         tool_result = await tool_function(**tool_function_params)
-                        print(f"RESULT: {tool_result}")
 
                 except Exception as e:
                     tool_result = str(e)
@@ -1941,14 +1937,11 @@ async def process_chat_response(
                                         }
                                     )
 
-                                    print(f"POST TOOL RESULT EVENT CALLER: {tool_result}")
-
                                 else:
                                     tool_function = tool["callable"]
                                     tool_result = await tool_function(
                                         **tool_function_params
                                     )
-                                    print(f"POST TOOL RESULT EVENT CALLER: {tool_result}")
 
                             except Exception as e:
                                 tool_result = str(e)

@@ -31,17 +31,13 @@ def get_sorted_filter_ids(model: dict):
     filter_ids.sort(key=get_priority)
     return filter_ids
 
-from open_webui.pipes.tool_test2 import Filter
-
-global_filter = Filter()
-GLOBAL_FILTERS = {global_filter.id: global_filter}
 
 async def process_filter_functions(
     request, filter_functions, filter_type, form_data, extra_params
 ):
     skip_files = None
-    for function in [*filter_functions, *GLOBAL_FILTERS.values()]:
-        
+
+    for function in filter_functions:
         filter = function
         filter_id = function.id
         if not filter:
@@ -50,12 +46,7 @@ async def process_filter_functions(
         if filter_id in request.app.state.FUNCTIONS:
             function_module = request.app.state.FUNCTIONS[filter_id]
         else:
-            # Check if this is the tool interceptor filter
-            if filter_id in GLOBAL_FILTERS:
-                function_module = GLOBAL_FILTERS[filter_id]
-            else:
-                function_module, _, _ = load_function_module_by_id(filter_id)
-            
+            function_module, _, _ = load_function_module_by_id(filter_id)
             request.app.state.FUNCTIONS[filter_id] = function_module
 
         # Prepare handler function
@@ -68,7 +59,7 @@ async def process_filter_functions(
             skip_files = function_module.file_handler
 
         # Apply valves to the function
-        if not filter_id in GLOBAL_FILTERS and hasattr(function_module, "valves") and hasattr(function_module, "Valves"):
+        if hasattr(function_module, "valves") and hasattr(function_module, "Valves"):
             valves = Functions.get_function_valves_by_id(filter_id)
             function_module.valves = function_module.Valves(
                 **(valves if valves else {})
