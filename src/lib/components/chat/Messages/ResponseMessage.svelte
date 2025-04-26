@@ -48,6 +48,7 @@
 	import ContentRenderer from './ContentRenderer.svelte';
 	import { KokoroWorker } from '$lib/workers/KokoroWorker';
 	import FileItem from '$lib/components/common/FileItem.svelte';
+	import { generateOpenAIChatCompletion } from '$lib/apis/openai';
 
 	interface MessageType {
 		id: string;
@@ -853,7 +854,20 @@
 								{/if}
 
 								{#if (message?.sources || message?.citations) && (model?.info?.meta?.capabilities?.citations ?? true)}
-									<Citations id={message?.id} sources={message?.sources ?? message?.citations} />
+									<Citations
+										id={message?.id}
+										sources={message?.sources ?? message?.citations}
+										on:addMessage
+										on:addMessage={async (event) => {
+											const userMessage = event.detail;
+
+											submitMessage(message.id, userMessage.content);
+
+											// Remove the sources from the current message
+											message.sources = [];
+											saveMessage(message.id, message);
+										}}
+									/>
 								{/if}
 
 								{#if message.code_executions}
