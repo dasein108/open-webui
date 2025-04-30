@@ -49,17 +49,19 @@
 			}
 
 			const result = await keplerWallet.executeContract(parsedDoc);
+			console.log('Transaction result', result);
+
 			const txHash = result.transactionHash;
 			const txStatus = await keplerWallet.getTx(txHash);
-			console.log('Transaction:', result);
+			console.log('Transaction status', txStatus);
 
 			let statusStr = `Transaction ${txStatus?.status}`;
 
 			if (txStatus?.result && Object.keys(txStatus?.result).length > 0) {
 				const resultStr = Object.entries(txStatus?.result || {})
-					.map(([key, value]) => `${key}: ${value}`)
+					.map(([key, value]) => `${key.toUpperCase()}: ${value}`)
 					.join(', ');
-				statusStr += `: ${resultStr}`;
+				statusStr += `\r\n${resultStr}`;
 			}
 
 			dispatch('addMessage', {

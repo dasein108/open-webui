@@ -1,8 +1,8 @@
 export interface TxCyberlinkResponseResult {
-	numeric_id?: string; // Created/updated cyberlink ID
-	formatted_id?: string; // Created/updated formatted ID
-	numeric_ids?: string[]; // Batch operation IDs
-	formatted_ids?: string[]; // Batch operation formatted IDs
+	gid?: string; // Created/updated cyberlink ID
+	fid?: string; // Created/updated formatted ID
+	gids?: string[]; // Batch operation IDs
+	fids?: string[]; // Batch operation formatted IDs
 }
 
 export interface TxStatusResponse {

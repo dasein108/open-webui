@@ -8,7 +8,7 @@ import { parseTxStatus } from './utils';
 
 // Chain Configuration
 const CHAIN_CONFIG = {
-	CONTRACT_ADDRESS: 'wasm1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqr5j2ht',
+	CONTRACT_ADDRESS: 'wasm1pvrwmjuusn9wh34j7y520g8gumuy9xtl3gvprlljfdpwju3x7ucsfg5rpz',
 	CHAIN_ID: 'test-chain',
 	DENOM: 'stake',
 	NODE_URL: 'http://localhost:26657',

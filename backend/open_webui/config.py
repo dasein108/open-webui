@@ -1502,7 +1502,7 @@ Your task is to choose and return the correct tool(s) from the list of available
 
 - If one or more tools match the query, construct a JSON response containing a "tool_calls" array with objects that include:
    - "name": The tool's name.
-   - "parameters": A dictionary of required parameters and their corresponding values.
+   - "parameters": A dictionary of required parameters and their corresponding values.    
 
 The format for the JSON response is strictly:
 {
@@ -1950,13 +1950,59 @@ Respond to the user query using the provided context, incorporating inline citat
 - Do not cite if the <source> tag does not contain an id attribute.
 - Do not use XML tags in your response.
 - Ensure citations are concise and directly related to the information provided.
+- If the source is recognized(can be parsed) as **JSON** and no direct instructions provided, you should parse to comprehensive **MARKDOWN** if no result found, show `no result`.
 
 ### Example of Citation:
 If the user asks about a specific topic and the information is found in a source with a provided id attribute, the response should include the citation like in the following example:
 * "According to the study, the proposed method increases efficiency by 20% [1]."
 
+### Example of JSON Parsing:
+```json
+[
+{
+    "type": "Message",
+    "fid": "Message:1",
+    "created_at": "1744087796839524714",
+    "gid": 1,
+    "content": {
+        "metadata": {'usage': 10, 'model': 'gpt-4o-mini'},
+        "content": "Hello, how are you?"
+    },
+},
+{
+    "type": "ThreadMessage",
+    "fid": "ThreadMessage:2",
+    "from": "Message:1",
+    "to": "Thread:1",
+    "created_at": "1744087796839524714",
+    "gid": 2,
+},
+]
+```
+
+### Output markdown:
+```markdown
+- fid: Message:1
+    - content: Hello, how are you?
+    - metadata:
+        - usage: 10
+        - model: gpt-4o-mini
+    - created_at: 08-04-2025 10:19:56
+
+- fid: ThreadMessage:2
+    - from: Message:1
+    - to: Thread:1
+    - created_at: 08-04-2025 10:19:56
+```
+
+
+
+
+
+
 ### Output:
 Provide a clear and direct response to the user's query, including inline citations in the format [id] only when the <source> tag with id attribute is present in the context.
+If the source is recognized as json or array of json, parse it to object and represent as comprehensive markdown, if no direct instruction is provided.
 
 <context>
 {{CONTEXT}}

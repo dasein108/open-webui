@@ -27,7 +27,7 @@ export const sanitizeQueryResult = (obj: any): any => {
 };
 
 // Fields to extract from cyberlink event
-const FIELD_NAMES = ['numeric_id', 'numeric_ids', 'formatted_id', 'formatted_ids'];
+const FIELD_NAMES = ['gid', 'gids', 'fid', 'fids'];
 
 export const parseTxStatus = async (tx: IndexedTx): Promise<TxStatusResponse> => {
 	const wasmEvent = tx.events.find((e) => e.type === 'wasm')?.attributes || [];
