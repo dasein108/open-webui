@@ -7,13 +7,23 @@ import type { TxStatusResponse } from './types';
 import { parseTxStatus } from './utils';
 
 // Chain Configuration
+// Local
+// const CHAIN_CONFIG = {
+// 	CONTRACT_ADDRESS: 'wasm1pvrwmjuusn9wh34j7y520g8gumuy9xtl3gvprlljfdpwju3x7ucsfg5rpz',
+// 	CHAIN_ID: 'test-chain',
+// 	DENOM: 'stake',
+// 	NODE_URL: 'http://localhost:26657',
+// 	RPC_TIMEOUT: 60000,
+// 	GAS_PRICE_AMOUNT: '0.025'
+// } as const;
+
 const CHAIN_CONFIG = {
-	CONTRACT_ADDRESS: 'wasm1pvrwmjuusn9wh34j7y520g8gumuy9xtl3gvprlljfdpwju3x7ucsfg5rpz',
-	CHAIN_ID: 'test-chain',
-	DENOM: 'stake',
-	NODE_URL: 'http://localhost:26657',
+	CONTRACT_ADDRESS: 'cyber14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sjxkrqd',
+	CHAIN_ID: 'cyber42-1',
+	DENOM: 'STAKE',
+	NODE_URL: 'http://rpc.cyber-rollup.chatcyber.ai',
 	RPC_TIMEOUT: 60000,
-	GAS_PRICE_AMOUNT: '0.025'
+	GAS_PRICE_AMOUNT: '0.15'
 } as const;
 
 interface SignDoc {
