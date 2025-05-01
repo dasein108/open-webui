@@ -21,7 +21,7 @@ const CHAIN_CONFIG = {
 	CONTRACT_ADDRESS: 'cyber14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sjxkrqd',
 	CHAIN_ID: 'cyber42-1',
 	DENOM: 'STAKE',
-	NODE_URL: 'http://rpc.cyber-rollup.chatcyber.ai',
+	NODE_URL: 'https://rpc.cyber-rollup.chatcyber.ai',
 	RPC_TIMEOUT: 60000,
 	GAS_PRICE_AMOUNT: '0.15'
 } as const;
