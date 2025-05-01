@@ -21,10 +21,54 @@ const CHAIN_CONFIG = {
 	CONTRACT_ADDRESS: 'cyber14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sjxkrqd',
 	CHAIN_ID: 'cyber42-1',
 	DENOM: 'STAKE',
-	NODE_URL: 'https://rpc.cyber-rollup.chatcyber.ai',
+	NODE_RPC_URL: 'https://rpc.cyber-rollup.chatcyber.ai',
+	LCD_URL: 'https://api.cyber-rollup.chatcyber.ai',
 	RPC_TIMEOUT: 60000,
 	GAS_PRICE_AMOUNT: '0.15'
 } as const;
+
+// Chain suggestion configuration for Keplr
+const CHAIN_INFO = {
+	chainId: CHAIN_CONFIG.CHAIN_ID,
+	chainName: 'Cyber TESTNET',
+	rpc: CHAIN_CONFIG.NODE_RPC_URL,
+	rest: CHAIN_CONFIG.LCD_URL,
+	bip44: {
+		coinType: 118
+	},
+	bech32Config: {
+		bech32PrefixAccAddr: 'cyber',
+		bech32PrefixAccPub: 'cyberpub',
+		bech32PrefixValAddr: 'cybervaloper',
+		bech32PrefixValPub: 'cybervaloperpub',
+		bech32PrefixConsAddr: 'cybervalcons',
+		bech32PrefixConsPub: 'cybervalconspub'
+	},
+	currencies: [
+		{
+			coinDenom: CHAIN_CONFIG.DENOM,
+			coinMinimalDenom: CHAIN_CONFIG.DENOM.toLowerCase(),
+			coinDecimals: 6
+		}
+	],
+	feeCurrencies: [
+		{
+			coinDenom: CHAIN_CONFIG.DENOM,
+			coinMinimalDenom: CHAIN_CONFIG.DENOM.toLowerCase(),
+			coinDecimals: 6,
+			gasPriceStep: {
+				low: 0.1,
+				average: 0.15,
+				high: 0.3
+			}
+		}
+	],
+	stakeCurrency: {
+		coinDenom: CHAIN_CONFIG.DENOM,
+		coinMinimalDenom: CHAIN_CONFIG.DENOM.toLowerCase(),
+		coinDecimals: 6
+	}
+};
 
 interface SignDoc {
 	chain_id: string;
@@ -72,7 +116,7 @@ function createKeplerWalletContext(): KeplerWalletContext {
 		});
 
 		// Initialize CosmWasmClient immediately
-		CosmWasmClient.connect(CHAIN_CONFIG.NODE_URL)
+		CosmWasmClient.connect(CHAIN_CONFIG.NODE_RPC_URL)
 			.then((client) => {
 				cosmWasmClient = client;
 			})
@@ -83,6 +127,14 @@ function createKeplerWalletContext(): KeplerWalletContext {
 		try {
 			if (!window.keplr) {
 				throw new Error('Keplr extension not installed');
+			}
+
+			try {
+				// Try to suggest the chain to Keplr
+				await window.keplr.experimentalSuggestChain(CHAIN_INFO);
+			} catch (error) {
+				console.warn('Failed to suggest chain to Keplr:', error);
+				// Continue anyway as the chain might already be added
 			}
 
 			// Enable access to chain
@@ -177,7 +229,7 @@ function createKeplerWalletContext(): KeplerWalletContext {
 			// Create signing client
 			const gasPrice = GasPrice.fromString(`${CHAIN_CONFIG.GAS_PRICE_AMOUNT}${CHAIN_CONFIG.DENOM}`);
 			const signingClient = await SigningCosmWasmClient.connectWithSigner(
-				CHAIN_CONFIG.NODE_URL,
+				CHAIN_CONFIG.NODE_RPC_URL,
 				offlineSigner,
 				{ gasPrice }
 			);
