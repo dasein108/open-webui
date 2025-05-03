@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - dev
+      - cyber-dev
     tags:
       - v*
 

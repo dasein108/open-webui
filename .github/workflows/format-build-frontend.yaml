@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - dev
+      - cyber-dev
     paths-ignore:
       - 'backend/**'
       - 'pyproject.toml'
