@@ -47,6 +47,7 @@
 	import NotificationToast from '$lib/components/NotificationToast.svelte';
 	import AppSidebar from '$lib/components/app/AppSidebar.svelte';
 	import { chatCompletion } from '$lib/apis/openai';
+	import { AudioFiles, playSystemSoundIfAllowed } from '$lib/components/common/sound';
 
 	setContext('i18n', i18n);
 
@@ -587,7 +588,7 @@
 
 			const audio = new Audio(`/audio/greeting.mp3`);
 			const playAudio = () => {
-				audio.play();
+				playSystemSoundIfAllowed(AudioFiles.Greeting);
 				document.removeEventListener('click', playAudio);
 			};
 

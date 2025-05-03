@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { settings, playingNotificationSound, isLastActiveTab } from '$lib/stores';
+	import { isLastActiveTab } from '$lib/stores';
 	import DOMPurify from 'dompurify';
 
 	import { marked } from 'marked';
 	import { createEventDispatcher, onMount } from 'svelte';
+	import { playSystemSoundIfAllowed } from './common/sound';
 
 	const dispatch = createEventDispatcher();
 
@@ -15,17 +16,8 @@
 		if (!navigator.userActivation.hasBeenActive) {
 			return;
 		}
-
-		if ($settings?.notificationSound ?? true) {
-			if (!$playingNotificationSound && $isLastActiveTab) {
-				playingNotificationSound.set(true);
-
-				const audio = new Audio(`/audio/notification.mp3`);
-				audio.play().finally(() => {
-					// Ensure the global state is reset after the sound finishes
-					playingNotificationSound.set(false);
-				});
-			}
+		if ($isLastActiveTab) {
+			playSystemSoundIfAllowed();
 		}
 	});
 </script>

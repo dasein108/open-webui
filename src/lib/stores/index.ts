@@ -5,6 +5,7 @@ import type { Banner } from '$lib/types';
 import type { Socket } from 'socket.io-client';
 
 import emojiShortCodes from '$lib/emoji-shortcodes.json';
+import type { ServerConfig } from '$lib/apis/types';
 
 // Backend
 export const WEBUI_NAME = writable(APP_NAME);
@@ -62,7 +63,10 @@ export const toolServers = writable([]);
 
 export const banners: Writable<Banner[]> = writable([]);
 
-export const settings: Writable<Settings> = writable({});
+export const settings: Writable<Settings> = writable({
+	chatDirection: 'auto',
+	notificationSoundAlways: false
+});
 
 export const showSidebar = writable(false);
 export const showSettings = writable(false);
@@ -79,7 +83,6 @@ export const scrollPaginationEnabled = writable(false);
 export const currentChatPage = writable(1);
 
 export const isLastActiveTab = writable(true);
-export const playingNotificationSound = writable(false);
 
 export type Model = OpenAIModel | OllamaModel;
 
@@ -156,6 +159,8 @@ type Settings = {
 	num_batch?: string;
 	num_keep?: string;
 	options?: ModelOptions;
+	toolServers?: ServerConfig[];
+	notificationSoundAlways: boolean;
 };
 
 type ModelOptions = {
