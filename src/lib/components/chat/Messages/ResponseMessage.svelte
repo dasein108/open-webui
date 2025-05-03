@@ -20,12 +20,10 @@
 	import { imageGenerations } from '$lib/apis/images';
 	import {
 		copyToClipboard as _copyToClipboard,
-		approximateToHumanReadable,
 		getMessageContentParts,
 		sanitizeResponseContent,
 		createMessagesList,
 		formatDate,
-		removeDetails,
 		removeAllDetails
 	} from '$lib/utils';
 	import { WEBUI_BASE_URL } from '$lib/constants';
@@ -853,7 +851,20 @@
 								{/if}
 
 								{#if (message?.sources || message?.citations) && (model?.info?.meta?.capabilities?.citations ?? true)}
-									<Citations id={message?.id} sources={message?.sources ?? message?.citations} />
+									<Citations
+										id={message?.id}
+										sources={message?.sources ?? message?.citations}
+										on:addMessage
+										on:addMessage={async (event) => {
+											const userMessage = event.detail;
+
+											submitMessage(message.id, userMessage.content);
+
+											// Remove the sources from the current message
+											message.sources = [];
+											saveMessage(message.id, message);
+										}}
+									/>
 								{/if}
 
 								{#if message.code_executions}
